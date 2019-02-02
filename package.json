@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Boilerplate webpack",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "postprocessing": "^5.6.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.3",

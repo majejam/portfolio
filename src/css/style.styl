@@ -4,8 +4,134 @@
     
 
 html,body
-    position fixed
+    position relative
     top 0
     left 0
     width 100%
     height 100%
+    overflow hidden
+    font-family 'Montserrat', sans-serif
+    user-select none
+    color white
+.container-intro
+    position absolute
+    top 0
+    left 0
+    width 100%
+    height 100%
+    background black
+    animation appear 2s ease 1s 1 reverse forwards
+    opacity 1
+    z-index 1
+    will-change opacity 
+
+.container-home
+    position absolute
+    top 0
+    left 0
+    width 100%
+    height 100%
+    display flex
+    justify-content center
+    align-items center
+    flex-flow column nowrap
+    z-index 2
+    transition 2s ease all
+
+$keyframe-name = appear
+@keyframes {$keyframe-name}
+  for i in 0..10
+    {10% * i}
+      opacity (i/10)
+
+.introduction
+    display flex
+    justify-content center
+    align-items center
+    flex-flow column nowrap
+    z-index 3
+    transition 1s ease opacity
+
+.title
+    font-size 2.2em 
+    font-weight 700
+
+
+.subtitle
+    font-size 1em 
+    font-weight 500
+
+.hide
+    position fixed
+    opacity 0
+    z-index -1
+.show
+    position relative
+    opacity 1
+    z-index 2
+
+.projects
+    position absolute
+    top 50px 
+    left 50px 
+    font-weight 500
+    cursor pointer
+    transition 1s ease all
+
+.link-container
+    position absolute
+    bottom 50px
+    left 50%
+    transform translateX(-50%)
+    width 60%
+    height auto
+    display flex
+    justify-content space-around
+    align-items center
+    flex-flow row nowrap
+    z-index 2
+    overflow hidden
+
+.container-projects
+    justify-content center
+    align-items center
+    flex-flow column nowrap
+    z-index 3
+    transition 1s ease opacity
+
+.link-p
+    text-decoration none
+    font-size 1.8em 
+    font-weight 500
+    color white
+    margin-top 10px
+
+.link-p-view
+    margin-bottom 10px
+
+.link-p:visited
+    color white
+
+.link
+    text-decoration none
+    font-size 1em 
+    font-weight 500
+    color white
+
+.link:visited
+    color white
+
+.cvdiv
+    position absolute
+    top 50px 
+    right 50px 
+    font-weight 300
+    z-index 2
+
+  @media (max-width: 500px)
+    .link-container
+        width 90%
+
+    .projects
+        top 20px 
+        left 20px 
