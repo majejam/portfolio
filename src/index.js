@@ -20,20 +20,20 @@ myProjectBtn.addEventListener('click', () => {
         show = true
     
     if(show == true){
+        link.style.display = 'flex'
+        myProjectBtn.innerHTML = 'Home'
         intro.classList.remove('show')
         link.classList.remove('hide')
         intro.classList.add('hide')
         link.classList.add('show')
-        link.style.display = 'flex'
-        myProjectBtn.innerHTML = 'Home'
     }
     else{
         intro.classList.remove('hide')
         link.classList.remove('show')
         link.classList.add('hide')
-        link.style.display = 'none'
         intro.classList.add('show')
         myProjectBtn.innerHTML = 'My projects'
+        setTimeout(() => {link.style.display = 'none'}, 10);
     }
 })
 /**
