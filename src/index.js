@@ -13,6 +13,8 @@ let show = false
 const link = document.querySelector('.container-projects')
 const intro = document.querySelector('.introduction')
 const myProjectBtn = document.querySelector('.projects')
+const container = document.querySelector('.container-home')
+const project_container = document.querySelector('.projects-container')
 myProjectBtn.addEventListener('click', () => {
     if(show)
         show = false 
@@ -144,13 +146,36 @@ effectPassGlitch.renderToScreen = true;
 
 const effectPassPixel = new POST.EffectPass(camera, new POST.PixelationEffect());
 effectPassPixel.renderToScreen = true;
+console.log(effectPassGlitch.effects[0])
+console.log(effectPassGlitch.effects[0].strength)
+//delay between each, if 0 & 0 then => infinite (seconde)
+//effectPassGlitch.effects[0].delay.x = 0 
+//effectPassGlitch.effects[0].delay.y = 0
+//strength of glitch (between 0 and 10 is good)
 
+
+console.log(effectPassGlitch)
+effectPassGlitch.minTime = 0
+effectPassGlitch.maxTime = 0
+effectPassGlitch.enabled = true;
 composer.addPass(new POST.RenderPass(scene, camera));
 composer.addPass(effectPassGlitch);
+effectPassGlitch.effects[0].delay.y = effectPassGlitch.effects[0].delay.x
 //composer.addPass(effectPassPixel);
+let mouse_hold = false
+document.addEventListener('mousedown', ()=>{
+    mouse_hold = true
+})
+document.addEventListener('mouseup', ()=>{
+    mouse_hold = false
+})
+console.log(objects[0]);
+
 /**
  * Loop
  */
+let increment = 0
+let speed = 5
 const loop = () =>
 {
     window.requestAnimationFrame(loop)
@@ -159,13 +184,38 @@ const loop = () =>
         objects[j].rotation.y += 0.01
         objects[j].rotation.z += 0.01
         objects[j].rotation.x += 0.01
-        objects[j].position.z += 5
+        objects[j].position.z += speed
         if(objects[j].position.z > 200){
             objects[j].position.z = (10000 + (Math.random() * 100)) * -1
         }
     }
 
-
+    if(mouse_hold){
+        increment += 1
+        speed = speed + (increment/50)
+        effectPassGlitch.effects[0].strength.x = effectPassGlitch.effects[0].strength.x + (increment/5)
+        effectPassGlitch.effects[0].strength.y = effectPassGlitch.effects[0].strength.y + (increment/5)
+        if(effectPassGlitch.effects[0].delay.y >= 0){
+            effectPassGlitch.effects[0].delay.x = effectPassGlitch.effects[0].delay.x - (increment/50)
+            effectPassGlitch.effects[0].delay.y = effectPassGlitch.effects[0].delay.y - (increment/50)
+        }
+        for (let i = 0; i < objects.length; i++) {
+            objects[i].position.y = objects[i].position.y + (Math.random() - 0.5) * (increment*10)
+            objects[i].position.x = objects[i].position.x + (Math.random() - 0.5) * (increment*10)
+        }
+        console.log(effectPassGlitch.effects[0].delay);   
+    }
+    if(speed > 150){
+        for (let i = 0; i < objects.length; i++) {
+            objects[i].visible = false
+        }
+        container.style.opacity = '0';
+        setTimeout(() => {
+            container.style.display = 'none';
+            project_container.style.display = 'flex';
+        }, 100);
+       
+    }
     // Renderer
     renderer.render(scene, camera)
     

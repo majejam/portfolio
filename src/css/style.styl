@@ -36,7 +36,7 @@ html,body
     align-items center
     flex-flow column nowrap
     z-index 2
-    transition 2s ease all
+    transition 0.2s ease all
 
 $keyframe-name = appear
 @keyframes {$keyframe-name}
@@ -129,7 +129,59 @@ $keyframe-name = appear
     right 50px 
     font-weight 300
     z-index 2
+.projects-container
+    position absolute
+    top 0
+    left 0 
+    right 0 
+    bottom 0 
+    padding: 0 10%
+    display none
 
+.projects-inside-ctn
+    width 100% 
+    height 100vh
+    padding 100px 0
+    animation appear 1s ease 0s 1 backwards normal
+
+.project
+    width 60%
+    color white
+    display flex 
+    justify-content center 
+    flex-flow column nowrap
+    align-items flex-start
+    transform matrix(1, 0.02, 0, 0.9, 0, 0);
+    animation appear-text 1s ease-in-out 0s 1 forwards normal
+.date
+    font-weight 500 
+    font-size 1.1em
+.project-title
+    font-weight 700
+    margin-top -10px
+    margin-left -5px
+    font-size 5em
+.project-paragraph
+    font-size 1.1em
+    font-weight 300 
+
+@keyframes appear {
+    0%{
+    transform: translateY(100%)    
+    }
+    100%{
+    transform: translateY(0%)    
+    }
+}
+
+@keyframes appear-text {
+    0%{
+    transform matrix(1, 0.1, 0, 0.8, 0, 0);   
+    }
+    100%{
+    transform matrix(1, 0, 0, 1, 0, 0);   
+    }
+}
   @media (max-width: 500px)
     .link-container
         width 90%
