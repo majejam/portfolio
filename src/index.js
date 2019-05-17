@@ -207,6 +207,13 @@ document.addEventListener('mouseup', ()=>{
     mouse_hold = false
 })
 
+document.addEventListener('touchstart', ()=>{
+    mouse_hold = true
+})
+document.addEventListener('touchend', ()=>{
+    mouse_hold = false
+})
+
 /**
  * Loop
  */
@@ -245,6 +252,8 @@ const loop = () =>
         for (let i = 0; i < objects.length; i++) {
             objects[i].visible = false
         }
+        close_button.style.display = 'flex'
+        scroll__bar.style.display = 'flex'
         container.style.opacity = '0';
         project_container.style.transform = 'translateY(0%)'
         setTimeout(() => {
@@ -257,7 +266,7 @@ const loop = () =>
                 projects[index].style.animationName = 'none'
             }
         }, 1050);
-       
+       speed = 5
     }
 
     // Renderer
@@ -271,10 +280,13 @@ close_button.addEventListener('click', () =>{
         objects[i].visible = true
     }
     speed = 5
+    project_container.style.transitionDuration = '0.5s'
     project_container.style.transform = 'translateY(100%)'
-    
+    close_button.style.display = 'none'
+    scroll__bar.style.display = 'none'
     setTimeout(() => {
         container.style.opacity = '1';
+        project_container.style.transitionDuration = '0.1s'
     }, 550);
 
     setTimeout(() => {
