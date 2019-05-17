@@ -15,6 +15,9 @@ const intro = document.querySelector('.introduction')
 const myProjectBtn = document.querySelector('.projects')
 const container = document.querySelector('.container-home')
 const project_container = document.querySelector('.projects-container')
+const projects = document.querySelectorAll('.project')
+const scroll__bar = document.querySelector('.scroll__bar')
+const close_button = document.querySelector('.close_button')
 myProjectBtn.addEventListener('click', () => {
     if(show)
         show = false 
@@ -38,6 +41,7 @@ myProjectBtn.addEventListener('click', () => {
         setTimeout(() => {link.style.display = 'none'}, 10);
     }
 })
+
 /**
  * Scene
  */
@@ -74,6 +78,40 @@ ambientLight.position.x = 0
 ambientLight.position.y = 0
 ambientLight.position.z = 1
 scene.add(ambientLight)
+let position_container = 0
+
+let scrollspeed = 0
+window.addEventListener( 'wheel', onMouseWheel, false );
+window.addEventListener( 'scroll', onMouseWheel, false );
+function onMouseWheel( event ) {
+    //event.preventDefault();
+    //posc += event.deltaY * 0.003;
+    console.log(event.deltaY);
+    scrollspeed = event.deltaY 
+    position_container = position_container - scrollspeed
+    if(position_container < 0 ){
+
+    }
+    else{
+        position_container = 0
+        scrollspeed = 0
+    }
+    if(position_container > (-project_container.offsetHeight + sizes.height)){
+
+    }
+    else{
+        position_container = (-project_container.offsetHeight + sizes.height)
+        scrollspeed = 0
+    }
+    for (let index = 0; index < projects.length; index++) {
+        projects[index].style.transform = `matrix(1, ${scrollspeed/1000}, 0, ${1 - Math.abs(scrollspeed/1000)}, 0, 0)`
+    }
+    scroll__bar.style.transform = `translateY(${-position_container * 1.35}px)`
+    project_container.style.transform = `translateY(${position_container}px)`
+    
+}
+
+
 /**
  * Object
  */
@@ -146,8 +184,7 @@ effectPassGlitch.renderToScreen = true;
 
 const effectPassPixel = new POST.EffectPass(camera, new POST.PixelationEffect());
 effectPassPixel.renderToScreen = true;
-console.log(effectPassGlitch.effects[0])
-console.log(effectPassGlitch.effects[0].strength)
+
 //delay between each, if 0 & 0 then => infinite (seconde)
 //effectPassGlitch.effects[0].delay.x = 0 
 //effectPassGlitch.effects[0].delay.y = 0
@@ -169,7 +206,6 @@ document.addEventListener('mousedown', ()=>{
 document.addEventListener('mouseup', ()=>{
     mouse_hold = false
 })
-console.log(objects[0]);
 
 /**
  * Loop
@@ -203,22 +239,46 @@ const loop = () =>
             objects[i].position.y = objects[i].position.y + (Math.random() - 0.5) * (increment*10)
             objects[i].position.x = objects[i].position.x + (Math.random() - 0.5) * (increment*10)
         }
-        console.log(effectPassGlitch.effects[0].delay);   
+        
     }
     if(speed > 150){
         for (let i = 0; i < objects.length; i++) {
             objects[i].visible = false
         }
         container.style.opacity = '0';
+        project_container.style.transform = 'translateY(0%)'
         setTimeout(() => {
             container.style.display = 'none';
             project_container.style.display = 'flex';
+
         }, 100);
+        setTimeout(() => {
+            for (let index = 0; index < projects.length; index++) {
+                projects[index].style.animationName = 'none'
+            }
+        }, 1050);
        
     }
+
     // Renderer
     renderer.render(scene, camera)
     
 }
 loop()
 
+close_button.addEventListener('click', () =>{
+    for (let i = 0; i < objects.length; i++) {
+        objects[i].visible = true
+    }
+    speed = 5
+    project_container.style.transform = 'translateY(100%)'
+    
+    setTimeout(() => {
+        container.style.opacity = '1';
+    }, 550);
+
+    setTimeout(() => {
+        container.style.display = 'flex';
+    }, 500);
+    
+})
