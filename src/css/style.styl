@@ -138,6 +138,7 @@ $keyframe-name = appear
     left 0
     padding: 0 10%
     display none
+    overflow: hidden;
     transition 0.1s ease transform
 
 .projects-inside-ctn
@@ -209,7 +210,7 @@ $keyframe-name = appear
     transition 0.1s ease-in-out all
     cursor pointer
     text-decoration none
-    animation appear-text 1s ease-in-out 0s 1 forwards normal
+    animation 0.5s ease-in-out 0s 1 forwards normal
 .big__title__container
     width 500px
     height 100px
@@ -241,6 +242,7 @@ $keyframe-name = appear
     border-radius 5px
     z-index 1000
     display none
+    transition: 0.1s linear all;
 .close_button
     position fixed 
     top 40px 
@@ -270,7 +272,7 @@ $keyframe-name = appear
 
 @keyframes appear-text {
     0%{
-    transform matrix(1, 0.1, 0, 0.8, 0, 0);   
+    transform matrix(1, 0.2, 0, 0.7, 0, 0);   
     }
     100%{
     transform matrix(1, 0, 0, 1, 0, 0);   
@@ -279,7 +281,9 @@ $keyframe-name = appear
   @media (max-width: 500px)
     .link-container
         width 90%
-
+    body
+        overflow-x hidden
+        overflow-y auto
     .projects
         top 20px 
         left 20px 

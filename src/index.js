@@ -10,6 +10,7 @@ import * as POST from "postprocessing"
  * Dom content
  */
 let show = false
+let ratio =0
 const link = document.querySelector('.container-projects')
 const intro = document.querySelector('.introduction')
 const myProjectBtn = document.querySelector('.projects')
@@ -79,16 +80,20 @@ ambientLight.position.y = 0
 ambientLight.position.z = 1
 scene.add(ambientLight)
 let position_container = 0
-
+let isScrolling
 let scrollspeed = 0
-window.addEventListener( 'wheel', onMouseWheel, false );
-window.addEventListener( 'scroll', onMouseWheel, false );
+project_container.addEventListener( 'wheel', onMouseWheel, false );
+project_container.addEventListener( 'scroll', onMouseWheel, false );
 function onMouseWheel( event ) {
     //event.preventDefault();
     //posc += event.deltaY * 0.003;
-    console.log(event.deltaY);
+
     scrollspeed = event.deltaY 
     position_container = position_container - scrollspeed
+    if(scrollspeed > 50){
+        scrollspeed = 50
+    }
+
     if(position_container < 0 ){
 
     }
@@ -106,8 +111,20 @@ function onMouseWheel( event ) {
     for (let index = 0; index < projects.length; index++) {
         projects[index].style.transform = `matrix(1, ${scrollspeed/1000}, 0, ${1 - Math.abs(scrollspeed/1000)}, 0, 0)`
     }
-    scroll__bar.style.transform = `translateY(${-position_container * 1.35}px)`
+    scroll__bar.style.transform = `translateY(${-((position_container/(project_container.offsetHeight - sizes.height)) * (sizes.height - (sizes.height * ((100/ratio)/100))))}px)`
     project_container.style.transform = `translateY(${position_container}px)`
+    window.clearTimeout( isScrolling );
+
+	// Set a timeout to run after scrolling ends
+	isScrolling = setTimeout(function() {
+
+		// Run the callback
+    
+        for (let index = 0; index < projects.length; index++) {
+            projects[index].style.transform = `matrix(1, 0, 0, 1, 0, 0)`
+        }
+
+	}, 66);
     
 }
 
@@ -214,6 +231,7 @@ document.addEventListener('touchend', ()=>{
     mouse_hold = false
 })
 
+
 /**
  * Loop
  */
@@ -248,6 +266,16 @@ const loop = () =>
         }
         
     }
+    
+    if(speed > 100 && speed < 150){
+        camera.fov = camera.fov - 1;
+        camera.updateProjectionMatrix();
+        
+    }
+    else{
+        camera.fov = 175
+        camera.updateProjectionMatrix();
+    }
     if(speed > 150){
         for (let i = 0; i < objects.length; i++) {
             objects[i].visible = false
@@ -256,19 +284,27 @@ const loop = () =>
         scroll__bar.style.display = 'flex'
         container.style.opacity = '0';
         project_container.style.transform = 'translateY(0%)'
+        for (let index = 0; index < projects.length; index++) {
+            projects[index].style.animationName = 'appear-text'
+        } 
         setTimeout(() => {
             container.style.display = 'none';
             project_container.style.display = 'flex';
-
-        }, 100);
+        }, 50);
+        setTimeout(() => {
+            project_container.style.transitionDuration = '0.1s'
+        }, 500);
         setTimeout(() => {
             for (let index = 0; index < projects.length; index++) {
                 projects[index].style.animationName = 'none'
             }
-        }, 1050);
+        }, 2050);
        speed = 5
+       increment = 0
     }
-
+    // Scroll bar height 
+    ratio = project_container.offsetHeight/sizes.height
+    scroll__bar.style.height = `${100/(ratio)}%`
     // Renderer
     renderer.render(scene, camera)
     
@@ -284,9 +320,9 @@ close_button.addEventListener('click', () =>{
     project_container.style.transform = 'translateY(100%)'
     close_button.style.display = 'none'
     scroll__bar.style.display = 'none'
+   
     setTimeout(() => {
         container.style.opacity = '1';
-        project_container.style.transitionDuration = '0.1s'
     }, 550);
 
     setTimeout(() => {
