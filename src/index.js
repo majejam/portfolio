@@ -19,6 +19,7 @@ const project_container = document.querySelector('.projects-container')
 const projects = document.querySelectorAll('.project')
 const scroll__bar = document.querySelector('.scroll__bar')
 const close_button = document.querySelector('.close_button')
+const cursor = document.querySelector('.cursor')
 myProjectBtn.addEventListener('click', () => {
     if(show)
         show = false 
@@ -90,9 +91,6 @@ function onMouseWheel( event ) {
 
     scrollspeed = event.deltaY 
     position_container = position_container - scrollspeed
-    if(scrollspeed > 50){
-        scrollspeed = 50
-    }
 
     if(position_container < 0 ){
 
@@ -189,6 +187,22 @@ document.body.appendChild(renderer.domElement)
  * Clock
  */
 const clock = new THREE.Clock()
+/**
+ * Cursor
+ */
+const cursor_m = {}
+cursor_m.x = 0
+cursor_m.y = 0
+
+window.addEventListener('mousemove', (_event) =>
+{
+    cursor_m.x = _event.clientX / sizes.width 
+    cursor_m.y = _event.clientY / sizes.height 
+    console.log(cursor_m);
+    
+    cursor.style.left = `${cursor_m.x * 100}%`
+    cursor.style.top = `${cursor_m.y * 100}%`
+})
 
 
 /**
@@ -252,8 +266,9 @@ const loop = () =>
     }
 
     if(mouse_hold){
-        increment += 1
-        speed = speed + (increment/50)
+        increment += 0.1
+        speed = speed + increment
+        cursor.style.transform = `scale(${1 - increment/10})`
         effectPassGlitch.effects[0].strength.x = effectPassGlitch.effects[0].strength.x + (increment/5)
         effectPassGlitch.effects[0].strength.y = effectPassGlitch.effects[0].strength.y + (increment/5)
         if(effectPassGlitch.effects[0].delay.y >= 0){
@@ -266,8 +281,19 @@ const loop = () =>
         }
         
     }
+    else if(!mouse_hold && increment > 0){
+        increment -= 0.1
+        speed = speed - increment
+        cursor.style.transform = `scale(${1 - increment/10})`
+        effectPassGlitch.effects[0].strength.x = effectPassGlitch.effects[0].strength.x - (increment/5)
+        effectPassGlitch.effects[0].strength.y = effectPassGlitch.effects[0].strength.y - (increment/5)
+        if(effectPassGlitch.effects[0].delay.y >= 0){
+            effectPassGlitch.effects[0].delay.x = effectPassGlitch.effects[0].delay.x + (increment/50)
+            effectPassGlitch.effects[0].delay.y = effectPassGlitch.effects[0].delay.y + (increment/50)
+        }
+    }
     
-    if(speed > 100 && speed < 150){
+    if(speed > 100 && speed < 120){
         camera.fov = camera.fov - 1;
         camera.updateProjectionMatrix();
         
@@ -276,7 +302,8 @@ const loop = () =>
         camera.fov = 175
         camera.updateProjectionMatrix();
     }
-    if(speed > 150){
+
+    if(speed > 240){
         for (let i = 0; i < objects.length; i++) {
             objects[i].visible = false
         }
@@ -298,7 +325,7 @@ const loop = () =>
             for (let index = 0; index < projects.length; index++) {
                 projects[index].style.animationName = 'none'
             }
-        }, 2050);
+        }, 1050);
        speed = 5
        increment = 0
     }

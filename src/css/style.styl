@@ -13,6 +13,7 @@ html,body
     font-family 'Montserrat', sans-serif
     user-select none
     color white
+    cursor none 
 .container-intro
     position absolute
     top 0
@@ -36,7 +37,15 @@ html,body
     flex-flow column nowrap
     z-index 2
     transition 0.2s ease all
-
+.cursor
+    position fixed
+    top 0 
+    left 0
+    z-index: 2000000
+    width: 40px 
+    height: 40px
+    border-radius: 20px
+    border 1px solid white
 $keyframe-name = appear
 @keyframes {$keyframe-name}
   for i in 0..10
@@ -151,10 +160,11 @@ $keyframe-name = appear
     position absolute
     top 0 
     left 0
-    height 100px
+    height 90px
     width 0%
-    color rgb(224, 58, 58)
-    -webkit-text-stroke-width: 2px;
+    color: black;
+    -webkit-text-stroke-color: white;
+    -webkit-text-stroke-width: 1px;
     transition: 0.5s ease-out all
 
 .project:hover .title__container__left
@@ -181,10 +191,10 @@ $keyframe-name = appear
     transition: 0.5s ease-out all 
 .overlay__image
     position: absolute
-    top 0
-    left 0
-    right 0 
-    bottom 0 
+    top -5px    
+    left -5px
+    right -5px
+    bottom -5px 
     background: rgba(0,0,0,0.5)
 .img__size
     width 100%
@@ -194,7 +204,7 @@ $keyframe-name = appear
     position absolute
     top 0 
     right 0
-    height 100px
+    height 90px
     width 100%
 .project:hover .image__cover
     width 0%
@@ -211,13 +221,15 @@ $keyframe-name = appear
     cursor pointer
     text-decoration none
     animation 0.5s ease-in-out 0s 1 forwards normal
+    will-change transform 
 .big__title__container
     width 500px
-    height 100px
+    height 90px
     position relative
 .date
     font-weight 500 
     font-size 1.1em
+    margin-bottom 8px
 .project-title
     position absolute 
     top 0
@@ -259,6 +271,12 @@ $keyframe-name = appear
     background-repeat no-repeat
     transition 0.3s linear all;
     display none
+.link-text
+    display inline-block
+    padding 10px 0
+    margin-right 20px
+    margin-top 10px
+    color white
 .close_button:hover
     transform: rotate(180deg)
 @keyframes appear {
