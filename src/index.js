@@ -19,7 +19,12 @@ const project_container = document.querySelector('.projects-container')
 const projects = document.querySelectorAll('.project')
 const scroll__bar = document.querySelector('.scroll__bar')
 const close_button = document.querySelector('.close_button')
-const cursor = document.querySelector('.cursor')
+
+
+const cursor_hold = document.querySelector('.cursor-hold')
+const sml_bar = document.querySelector('.sml-bar')
+
+
 myProjectBtn.addEventListener('click', () => {
     if(show)
         show = false 
@@ -198,10 +203,25 @@ window.addEventListener('mousemove', (_event) =>
 {
     cursor_m.x = _event.clientX / sizes.width 
     cursor_m.y = _event.clientY / sizes.height 
-    console.log(cursor_m);
-    
-    cursor.style.left = `${cursor_m.x * 100}%`
-    cursor.style.top = `${cursor_m.y * 100}%`
+
+})
+
+const touchpos = {}
+touchpos.x = 0
+touchpos.y = 0
+window.addEventListener('touchestart', (_event) =>
+{
+    touchpos.x = _event.touches[0].clientX/sizes.width ;
+    touchpos.y = _event.touches[0].clientY/ sizes.height;
+    cursor_hold.style.left = `${(touchpos.x*100)-10}%`
+    cursor_hold.style.top = `${(touchpos.y*100)-10}%`    
+})
+window.addEventListener('touchmove', (_event) =>
+{
+    touchpos.x = _event.touches[0].clientX/sizes.width ;
+    touchpos.y = _event.touches[0].clientY/ sizes.height;
+    cursor_hold.style.left = `${(touchpos.x*100)-10}%`
+    cursor_hold.style.top = `${(touchpos.y*100)-10}%` 
 })
 
 /**
@@ -275,7 +295,11 @@ document.addEventListener('touchend', ()=>{
     mouse_hold = false
 })
 
+let str_x = effectPassGlitch.effects[0].strength.x
+let str_y = effectPassGlitch.effects[0].strength.y
 
+let dly_x = effectPassGlitch.effects[0].delay.x
+let dly_y = effectPassGlitch.effects[0].delay.y
 /**
  * Loop
  */
@@ -285,6 +309,9 @@ const loop = () =>
 {
     window.requestAnimationFrame(loop)
     composer.render(clock.getDelta())
+
+    cursor_hold.style.left = `${(cursor_m.x*100)+1.5}%`
+    cursor_hold.style.top = `${(cursor_m.y*100)+2}%`
     for (let j = 0; j < objects.length; j++) {
         objects[j].rotation.y += 0.01
         objects[j].rotation.z += 0.01
@@ -298,7 +325,9 @@ const loop = () =>
     if(mouse_hold){
         increment += 0.1
         speed = speed + increment
-        cursor.style.transform = `scale(${1 - increment/10})`
+        
+        sml_bar.style.transform = `scaleX(${(speed - 5)/235})`
+
         effectPassGlitch.effects[0].strength.x = effectPassGlitch.effects[0].strength.x + (increment/5)
         effectPassGlitch.effects[0].strength.y = effectPassGlitch.effects[0].strength.y + (increment/5)
         if(effectPassGlitch.effects[0].delay.y >= 0){
@@ -314,16 +343,16 @@ const loop = () =>
     else if(!mouse_hold && increment > 0){
         increment -= 0.1
         speed = speed - increment
-        cursor.style.transform = `scale(${1 - increment/10})`
-        effectPassGlitch.effects[0].strength.x = effectPassGlitch.effects[0].strength.x - (increment/5)
-        effectPassGlitch.effects[0].strength.y = effectPassGlitch.effects[0].strength.y - (increment/5)
+        sml_bar.style.transform = `scaleX(${(speed - 5)/235})`
+        effectPassGlitch.effects[0].strength.x = str_x
+        effectPassGlitch.effects[0].strength.y = str_y
         if(effectPassGlitch.effects[0].delay.y >= 0){
-            effectPassGlitch.effects[0].delay.x = effectPassGlitch.effects[0].delay.x + (increment/50)
-            effectPassGlitch.effects[0].delay.y = effectPassGlitch.effects[0].delay.y + (increment/50)
+            effectPassGlitch.effects[0].delay.x = dly_x
+            effectPassGlitch.effects[0].delay.y = dly_y
         }
     }
     
-    if(speed > 100 && speed < 120){
+    if(speed > 100 && speed < 240){
         camera.fov = camera.fov - 1;
         camera.updateProjectionMatrix();
         
@@ -360,8 +389,8 @@ const loop = () =>
        increment = 0
     }
     //ease-in 
-    camera.position.x = EasingFunctions.easeOutQuad(cursor_m.x) * 400
-    camera.position.y = EasingFunctions.easeOutQuad(cursor_m.y) * 400
+    camera.position.x = EasingFunctions.easeOutQuad(cursor_m.x/2 - cursor_m.x) * 400
+    camera.position.y = EasingFunctions.easeOutQuad(cursor_m.y/2 - cursor_m.y) * 400
     
 
     // Scroll bar height 
