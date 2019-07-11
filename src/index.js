@@ -272,7 +272,6 @@ effectPassPixel.renderToScreen = true;
 //strength of glitch (between 0 and 10 is good)
 
 
-console.log(effectPassGlitch)
 effectPassGlitch.minTime = 0
 effectPassGlitch.maxTime = 0
 effectPassGlitch.enabled = true;
