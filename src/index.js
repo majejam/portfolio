@@ -6,6 +6,27 @@ import * as THREE from 'three'
 
 import * as POST from "postprocessing" 
 
+
+/**
+ * Custom cursor
+ */
+
+
+function drawCursor(x, y, radius) {
+    this.context.beginPath();
+    this.context.fillStyle = '#8A1538';
+    this.context.arc(x, y, radius, 0, 2 * Math.PI, false);
+    this.context.fill();
+  }
+
+function updateCursor() {
+    this.context.clearRect(0, 0, this.sizes.width, this.sizes.height);
+    this.drawBall(this.pos.x, this.pos.y, 30);
+    this.pos.x = this.lerp(this.pos.x, this.pos.endX, 0.1);
+    this.pos.y = this.lerp(this.pos.y, this.pos.endY, 0.1);
+  }
+
+
 /**
  * Dom content
  */
@@ -304,6 +325,7 @@ let dly_y = effectPassGlitch.effects[0].delay.y
  */
 let increment = 0
 let speed = 5
+
 const loop = () =>
 {
     window.requestAnimationFrame(loop)
@@ -388,9 +410,13 @@ const loop = () =>
        increment = 0
     }
     //ease-in 
-    camera.position.x = EasingFunctions.easeOutQuad(cursor_m.x/2 - cursor_m.x) * 400
-    camera.position.y = EasingFunctions.easeOutQuad(cursor_m.y/2 - cursor_m.y) * 400
-    
+    //camera.position.x = EasingFunctions.easeOutQuad(cursor_m.x/2 - cursor_m.x) * 400
+    //camera.position.y = EasingFunctions.easeOutQuad(cursor_m.y/2 - cursor_m.y) * 400
+
+
+    camera.position.x = lerp(camera.position.x, (cursor_m.x * 2 - 1)* 700, 0.05)
+    camera.position.y = lerp(camera.position.y, (-cursor_m.y * 2 + 1) * 700, 0.05)
+
 
     // Scroll bar height 
     ratio = project_container.offsetHeight/sizes.height
@@ -400,6 +426,10 @@ const loop = () =>
     
 }
 loop()
+
+function lerp(min, max, fraction) {
+    return (max - min) * fraction + min;
+}
 
 close_button.addEventListener('click', () =>{
     for (let i = 0; i < objects.length; i++) {
